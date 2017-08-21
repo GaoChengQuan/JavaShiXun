@@ -21,8 +21,8 @@ public class StudentManager {
 			case 1://所有学生信息
 				System.out.println("1");
 				break;
-			case 2:
-				System.out.println("2");
+			case 2://添加学生信息
+				System.out.println("请输入姓名");
 				break;
 			case 3:
 				System.out.println("3");
