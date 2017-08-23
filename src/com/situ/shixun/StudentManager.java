@@ -58,18 +58,18 @@ public class StudentManager {
 						System.out.println("没有该年龄的学生.");
 					}
 					break;
-				case 3://【3】根据班级查找
+				case 3://【3】根据性别查找
 					System.out.println("请输入要搜索的班级:");
-					String classNameSearch = scanner.next();
-					boolean isSearchByClassNameFound = false;
+					String genderSearch = scanner.next();
+					boolean isSearchByGenderFound = false;
 					for (Student stu : list) {
 						//如果有叫这个名字的学生就打印学生信息
-						if (stu.getClassName().equals(classNameSearch)) {
+						if (stu.getGender().equals(genderSearch)) {
 							System.out.println(stu);
 							isSearchByNameFound = true;
 						}
 					}
-					if (isSearchByClassNameFound == false) {
+					if (isSearchByGenderFound == false) {
 						System.out.println("没有该班级的学生.");
 					}
 					break;
@@ -95,10 +95,8 @@ public class StudentManager {
 		String name = scanner.next();
 		System.out.println("请输入年龄");
 		int age = scanner.nextInt();
-		System.out.println("请输入班级");
-		String className = scanner.next();
-		Student student = new Student(name, age, className);
-		list.add(student);
+		
+		//list.add(student);
 	}
 
 	/**
