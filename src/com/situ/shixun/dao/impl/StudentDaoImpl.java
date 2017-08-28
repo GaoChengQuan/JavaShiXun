@@ -1,21 +1,23 @@
-package com.situ.shixun;
+package com.situ.shixun.dao.impl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class StudentTest {
-	public static void main(String[] args) {
-		Student student = new Student("zs", 28, "男", "市南");
-		addStudent(student);
-		//findAll();
-	}
+import com.situ.shixun.dao.IStudentDao;
+import com.situ.shixun.pojo.Student;
+import com.situ.shixun.util.JdbcUtil;
 
-	private static void addStudent(Student student) {
+public class StudentDaoImpl implements IStudentDao{
+
+	@Override
+	public boolean add(Student student) {
 		Connection connection = null;
 		PreparedStatement statement = null;
+		boolean isSuccess = false;
 		//2、获取连接对象Connection。
 		try {
 			connection = JdbcUtil.getConnection();
@@ -31,20 +33,36 @@ public class StudentTest {
 			//  更新：delete/update/insert   executeUpdate   返回值int表示影响的行数。
 			//  查询：select                         executeQuery       返回结果集ResultSet。
 			int result  = statement.executeUpdate();
+			if (result > 0) {
+				isSuccess = true;
+			}
 			System.out.println(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			JdbcUtil.close(statement, connection);
 		}
-	
+		return isSuccess;
 	}
 
-	private static void findAll() {
+	@Override
+	public boolean deleteById(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean update(Student student) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Student> findAll() {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		
+		List<Student> list = new ArrayList<Student>();
 		//2、获取连接对象Connection。
 		try {
 			connection = JdbcUtil.getConnection();
@@ -64,6 +82,7 @@ public class StudentTest {
 				String address = resultSet.getString("address");
 				Student student = new Student(id, name, age, gender, address);
 				System.out.println(student);
+				list.add(student);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,5 +90,56 @@ public class StudentTest {
 			//6、关闭
 			JdbcUtil.close(resultSet, statement, connection);
 		}
+		
+		return list;
 	}
+
+	@Override
+	public List<Student> findByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Student> findByAge(int age) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Student> findByGender(String gender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean checkName(String name) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		//2、获取连接对象Connection。
+		try {
+			connection = JdbcUtil.getConnection();
+			//3、写sql语句。
+			String sql = "SELECT * FROM student where name=?;";
+			//4、创建Satement。
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			//5、执行sql语句。
+			//  更新：delete/update/insert   executeUpdate   返回值int表示影响的行数。
+			//  查询：select                         executeQuery       返回结果集ResultSet。
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			//6、关闭
+			JdbcUtil.close(resultSet, statement, connection);
+		}
+		
+		return false;
+	}
+
 }

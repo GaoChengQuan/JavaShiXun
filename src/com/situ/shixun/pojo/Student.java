@@ -1,4 +1,4 @@
-package com.situ.shixun;
+package com.situ.shixun.pojo;
 
 // 实体类
 public class Student {

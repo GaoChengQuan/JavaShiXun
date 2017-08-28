@@ -1,4 +1,4 @@
-package com.situ.shixun;
+package com.situ.shixun.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
