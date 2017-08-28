@@ -8,25 +8,46 @@ import java.sql.SQLException;
 
 public class StudentTest {
 	public static void main(String[] args) {
-		/*Student student = new Student("zs", 28, "男", "市南");
-		addStudent(student);*/
-		findAll();
+		Student student = new Student("zs", 28, "男", "市南");
+		addStudent(student);
+		//findAll();
+	}
+
+	private static void addStudent(Student student) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		//2、获取连接对象Connection。
+		try {
+			connection = JdbcUtil.getConnection();
+			//3、写sql语句。
+			String sql = "INSERT INTO student(NAME,age,gender,address) VALUES(?,?,?,?);";
+			//4、创建Satement。
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, student.getName());
+			statement.setInt(2, student.getAge());
+			statement.setString(3, student.getGender());
+			statement.setString(4, student.getAddress());
+			//5、执行sql语句。
+			//  更新：delete/update/insert   executeUpdate   返回值int表示影响的行数。
+			//  查询：select                         executeQuery       返回结果集ResultSet。
+			int result  = statement.executeUpdate();
+			System.out.println(result);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(statement, connection);
+		}
+	
 	}
 
 	private static void findAll() {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		//1、加载驱动 Class.forNmae("");
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		
 		//2、获取连接对象Connection。
 		try {
-			connection = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/java1707", "root", "root");
+			connection = JdbcUtil.getConnection();
 			//3、写sql语句。
 			String sql = "SELECT * FROM student;";
 			//4、创建Satement。
@@ -48,27 +69,7 @@ public class StudentTest {
 			e.printStackTrace();
 		} finally {
 			//6、关闭
-			if (resultSet != null) {
-				try {
-					resultSet.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			JdbcUtil.close(resultSet, statement, connection);
 		}
 	}
 }
